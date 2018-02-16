@@ -1,24 +1,18 @@
-Dependencies:
+## Automated Visual Regression
+
+This is a sample repo which demostrates how to create a automated visual regression test pipeline.
+
+# Dependencies needed
+
 Node 9.4.0 [https://nodejs.org/en/download/]
 Imagemagick [https://www.imagemagick.org/script/download.php]
 
-Running the test app
+# How to run the test suite
 
-```
-$ npm start
-=> http://localhost:3000
-```
-
-Running test suite
+Run the test suite with the following command
 
 ```
 $ npm test
-```
-
-Run tests in watch mode
-
-```
-$ npm test -- -w
 ```
 
 After running test suite, you can review generated images in the `__images__/output` folder.
@@ -27,10 +21,20 @@ To accept new images, you must manually copy and rename the image file into the 
 
 ```
 $ ./update-baseline.sh
+$ npm test
 ```
 
 To reset the baseline test images, you can run the following convenience script
 
 ```
 $ ./reset-baseline.sh
+$ npm test
+```
+
+# Running the test app
+
+To view the sample app, run the following command and visit `http://localhost:3000`
+
+```
+$ npm start
 ```
