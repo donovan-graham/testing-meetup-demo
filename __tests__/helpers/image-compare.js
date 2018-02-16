@@ -49,26 +49,34 @@ function addSuffix(filePath, suffix, customExtension) {
   return path.join(dirname, name + suffix + (customExtension || ext));
 }
 
-module.exports = async function imageCompare(actualBuffer, goldenName) {
-  const goldenPath = path.join(__dirname, '__images__/golden');
-  const outputPath = path.join(__dirname, '__images__/output');
+const defaultOpts = {
+  baselineDir: 'baseline',
+  outputDir: 'output'
+};
 
-  const expectedGoldenPath = path.join(goldenPath, goldenName);
+module.exports = async function imageCompare(actualBuffer, baselineName, opts) {
+  const baselineDir = (opts && opts.baselineDir) || defaultOpts.baselineDir;
+  const outputDir = (opts && opts.outputDir) || defaultOpts.outputDir;
 
-  const expectedOutputPath = path.join(outputPath, addSuffix(goldenName, '-0-expected'));
-  const actualOutputPath = path.join(outputPath, addSuffix(goldenName, '-1-actual'));
-  const diffOuputPath = path.join(outputPath, addSuffix(goldenName, '-2-diff'));
+  const baselinePath = path.join(__dirname, '__images__', baselineDir);
+  const outputPath = path.join(__dirname, '__images__', outputDir);
+
+  const expectedBaselinePath = path.join(baselinePath, baselineName);
+
+  const expectedOutputPath = path.join(outputPath, addSuffix(baselineName, '-0-expected'));
+  const actualOutputPath = path.join(outputPath, addSuffix(baselineName, '-1-actual'));
+  const diffOuputPath = path.join(outputPath, addSuffix(baselineName, '-2-diff'));
 
   const messageSuffix = `Output saved in "${outputPath}".`;
   fse.outputFileSync(actualOutputPath, actualBuffer);
 
-  if (!fs.existsSync(expectedGoldenPath)) {
+  if (!fs.existsSync(expectedBaselinePath)) {
     return {
       pass: false,
-      message: () => `${goldenName} file not found in "${goldenPath}". ${messageSuffix}`
+      message: () => `${baselineName} file not found in "${baselinePath}". ${messageSuffix}`
     };
   }
-  fse.copySync(expectedGoldenPath, expectedOutputPath);
+  fse.copySync(expectedBaselinePath, expectedOutputPath);
   const diff = await compareImages(actualOutputPath, expectedOutputPath, diffOuputPath);
 
   if (diff.match === 100) {
@@ -78,7 +86,7 @@ module.exports = async function imageCompare(actualBuffer, goldenName) {
     return { pass: true };
   }
 
-  const message = diff.errorMessage ? `${goldenName} mismatch! ${diff.errorMessage}` : `${goldenName} mismatch!`;
+  const message = diff.errorMessage ? `${baselineName} mismatch! ${diff.errorMessage}` : `${baselineName} mismatch!`;
 
   return {
     pass: false,

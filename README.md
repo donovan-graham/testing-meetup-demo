@@ -1,56 +1,36 @@
 Dependencies:
-Node 9.4.0 (developed and tested on this version) [https://nodejs.org/en/download/]
+Node 9.4.0 [https://nodejs.org/en/download/]
+Imagemagick [https://www.imagemagick.org/script/download.php]
 
-Imagemagick (required syste) [https://www.imagemagick.org/script/download.php]
-
-Yarn (optional) [https://yarnpkg.com/en/docs/install]
-
-Mac installation:
-
-```
-$ brew install yarn
-$ brew install watchman
-$ brew install imagemagick
-```
-
-Running the development server:
+Running the test app
 
 ```
 $ npm start
 => http://localhost:3000
 ```
 
-or
+Running test suite
 
 ```
-$ yarn start
-=> http://localhost:3000
+$ npm test
 ```
 
-Running test suite:
+Run tests in watch mode
 
 ```
-$ npm build && npm test
+$ npm test -- -w
 ```
 
-or
+After running test suite, you can review generated images in the `__images__/output` folder.
+
+To accept new images, you must manually copy and rename the image file into the `__images__/baseline` folder. You can also run the following convenience script, and then re-run the tests
 
 ```
-$ yarn build && yarn test
+$ ./update-baseline.sh
 ```
 
-Runnint tests in watch mode:
+To reset the baseline test images, you can run the following convenience script
 
 ```
-$ npm test -- --watchAll
+$ ./reset-baseline.sh
 ```
-
-or
-
-```
-$ yarn test -- --watchAll
-```
-
-    "build": "NODE_ENV='production' webpack -p",
-    "start": "webpack-dev-server",
-    "test": "jest"
