@@ -1,14 +1,13 @@
 {
-  "name": "testing-meetup-demo",
+  "name": "automated-visual-regression-demo",
   "version": "1.0.0",
-  "description": "Demo app for testing cpt meetup talk",
-  "main": "index.js",
+  "description": "Automated Visual Regression demo presented at Cape Town Testing meetup",
+  "author": "Donovan Graham <donovan@platform7.com>",
+  "license": "ISC",
   "scripts": {
     "start": "node ./server/index.js",
     "test": "jest --verbose"
   },
-  "author": "Donovan Graham <donovan@platform7.com>",
-  "license": "ISC",
   "devDependencies": {
     "express": "*",
     "fs-extra": "5.0.0",

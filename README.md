@@ -1,10 +1,10 @@
 ## Automated Visual Regression
 
-This is a sample repo which demostrates how to create a automated visual regression test pipeline.
+This is an example of an automated visual regression test pipeline, which was presented at the Cape Town Testing meetup.
 
 # Dependencies needed
 
-Node 9.4.0 [https://nodejs.org/en/download/]
+Node 9.4.0+ [https://nodejs.org/en/download/]
 Imagemagick [https://www.imagemagick.org/script/download.php]
 
 # How to run the test suite
