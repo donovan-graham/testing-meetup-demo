@@ -2,31 +2,30 @@ const fs = require('fs');
 const path = require('path');
 
 const imageCompare = require('./helpers/image-compare');
-const server = require('../server');
+const server = require('../app/server');
+const port = process.env.APP_PORT;
 
 describe('App', () => {
   let page;
-  let testApp;
+
+  beforeAll(async () => await server.start(port));
+  afterAll(async () => await server.stop());
 
   beforeEach(async () => {
-    testApp = await server.start(8888);
     page = await global.__BROWSER__.newPage();
     await page.setRequestInterception(true);
     let counter = 0;
     page.on('request', request => {
       counter++;
       if (counter === 1) {
-        request.continue({ url: `file://${path.join(process.cwd(), 'dist/index.html')}` });
+        request.continue({ url: `file://${path.join(process.cwd(), 'app/dist/index.html')}` });
       } else {
-        request.continue({ url: `file://${path.join(process.cwd(), 'dist/bundle.js')}` });
+        request.continue({ url: `file://${path.join(process.cwd(), 'app/dist/bundle.js')}` });
       }
     });
   });
 
-  afterAll(async () => {
-    await page.close();
-    await server.stop();
-  });
+  afterEach(async () => await page.close());
 
   const testCases = [
     { name: 'small screen', viewport: { width: 260, height: 600 }, image: 'app-small.png' },
@@ -40,7 +39,7 @@ describe('App', () => {
 
     it(name, async () => {
       await page.setViewport(viewport);
-      await page.goto('http://localhost:8888');
+      await page.goto(`http://localhost:${port}`);
 
       const screenshot = await page.screenshot({ fullPage: true, omitBackground: false });
       const result = await imageCompare(screenshot, image);

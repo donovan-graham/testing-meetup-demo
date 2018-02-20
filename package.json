@@ -5,11 +5,11 @@
   "author": "Donovan Graham <donovan@platform7.com>",
   "license": "ISC",
   "scripts": {
-    "start": "node ./server/index.js",
-    "test": "jest --verbose"
+    "start": "APP_PORT=3000 node ./app/index.js",
+    "test": "APP_PORT=3001 jest --verbose"
   },
   "devDependencies": {
-    "express": "*",
+    "express": "4.16.2",
     "fs-extra": "5.0.0",
     "gm": "1.23.1",
     "jest": "22.1.4",

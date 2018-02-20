@@ -58,8 +58,8 @@ module.exports = async function imageCompare(actualBuffer, baselineName, opts) {
   const baselineDir = (opts && opts.baselineDir) || defaultOpts.baselineDir;
   const outputDir = (opts && opts.outputDir) || defaultOpts.outputDir;
 
-  const baselinePath = path.join(__dirname, '__images__', baselineDir);
-  const outputPath = path.join(__dirname, '__images__', outputDir);
+  const baselinePath = path.join(process.cwd(), '__images__', baselineDir);
+  const outputPath = path.join(process.cwd(), '__images__', outputDir);
 
   const expectedBaselinePath = path.join(baselinePath, baselineName);
 
@@ -73,7 +73,7 @@ module.exports = async function imageCompare(actualBuffer, baselineName, opts) {
   if (!fs.existsSync(expectedBaselinePath)) {
     return {
       pass: false,
-      message: () => `${baselineName} file not found in "${baselinePath}". ${messageSuffix}`
+      message: () => `"${baselineName}" not found in "${baselinePath}". \n${messageSuffix}`
     };
   }
   fse.copySync(expectedBaselinePath, expectedOutputPath);
@@ -86,10 +86,15 @@ module.exports = async function imageCompare(actualBuffer, baselineName, opts) {
     return { pass: true };
   }
 
-  const message = diff.errorMessage ? `${baselineName} mismatch! ${diff.errorMessage}` : `${baselineName} mismatch!`;
+  if (diff.errorMessage) {
+    return {
+      pass: false,
+      message: () => `"${baselineName}" mismatch! \n${diff.errorMessage}. \n${messageSuffix}`
+    };
+  }
 
   return {
     pass: false,
-    message: () => `${message} ${messageSuffix}`
+    message: () => `"${baselineName}" mismatch! \n${messageSuffix}`
   };
 };
